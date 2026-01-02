@@ -7,7 +7,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  build:
+  build-images:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -56,3 +56,28 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ matrix.name }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  build-chart:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Set lowercase chart repository
+        run: echo "CHART_REPO=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')/nexus/chart" >> $GITHUB_ENV
+
+      - name: Log in to OCI Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Package Helm chart
+        run: helm package ./helm/nexus-station
+
+      - name: Push Helm chart to OCI Registry
+        run: helm push nexus-station-*.tgz oci://${{ env.REGISTRY }}/${{ env.CHART_REPO }}
