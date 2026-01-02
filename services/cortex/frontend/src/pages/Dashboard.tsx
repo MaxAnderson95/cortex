@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { api, ApiError } from '../api/client';
 import type { DashboardStatus } from '../types';
 import { Card, StatsCard } from '../components/ui/Card';
-import type { ErrorInfo } from '../components/ui/ErrorAlert';
+import { ErrorAlert, type ErrorInfo } from '../components/ui/ErrorAlert';
 import {
   Users,
   Anchor,
@@ -12,9 +12,7 @@ import {
   Package,
   AlertTriangle,
   Activity,
-  RefreshCw,
-  Copy,
-  Check
+  RefreshCw
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -22,7 +20,6 @@ function Dashboard() {
   const [status, setStatus] = useState<DashboardStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ErrorInfo | null>(null);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     loadDashboard();
@@ -45,14 +42,6 @@ function Dashboard() {
     }
   }
 
-  const handleCopyTraceId = async () => {
-    if (error?.traceId) {
-      await navigator.clipboard.writeText(error.traceId);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-cyan-500/50 space-y-4">
@@ -68,26 +57,7 @@ function Dashboard() {
         <div className="flex flex-col items-center p-8 text-center">
           <AlertTriangle className="w-12 h-12 text-red-500 mb-4" />
           <h3 className="text-xl text-red-400 font-bold mb-2 uppercase tracking-wide">Signal Lost</h3>
-          <p className="text-red-300/70 font-mono mb-4">{error.message}</p>
-          {error.traceId && (
-            <div className="mb-6 flex items-center gap-2 text-xs">
-              <span className="text-red-400/70">Trace ID:</span>
-              <code className="font-mono bg-red-500/10 px-2 py-1 rounded text-red-300 select-all">
-                {error.traceId}
-              </code>
-              <button
-                onClick={handleCopyTraceId}
-                className="p-1 hover:bg-red-500/20 rounded transition-colors"
-                title="Copy Trace ID"
-              >
-                {copied ? (
-                  <Check className="w-3 h-3 text-emerald-400" />
-                ) : (
-                  <Copy className="w-3 h-3 text-red-400" />
-                )}
-              </button>
-            </div>
-          )}
+          <ErrorAlert error={error} className="mb-6 text-left" />
           <button
             onClick={() => loadDashboard()}
             className="px-6 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/50 rounded transition-all font-mono text-sm uppercase tracking-wider flex items-center gap-2"

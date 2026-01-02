@@ -16,9 +16,14 @@ export function ErrorAlert({ error, className = '' }: ErrorAlertProps) {
 
   const handleCopyTraceId = async () => {
     if (error.traceId) {
-      await navigator.clipboard.writeText(error.traceId);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      try {
+        await navigator.clipboard.writeText(error.traceId);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        // Clipboard access can fail in unsecured contexts or when permission is denied
+        // Silently fail - the trace ID is still selectable via select-all on the code element
+      }
     }
   };
 
