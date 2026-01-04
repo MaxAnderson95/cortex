@@ -137,6 +137,10 @@
           "$ref": "#/$defs/resources"
         }
       }
+    },
+    "nexus-common": {
+      "type": "object",
+      "description": "Library chart dependency values (managed by Helm)"
     }
   },
   "$defs": {
