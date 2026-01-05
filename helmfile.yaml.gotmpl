@@ -35,6 +35,7 @@ environments:
 ---
 releases:
   # Infrastructure (PostgreSQL + Redis) - must be deployed first
+  # Note: dash0Monitoring not enabled - PostgreSQL/Redis don't benefit from OTel instrumentation
   - name: infra
     namespace: nexus-infra
     chart: ./charts/nexus-infra
@@ -42,8 +43,6 @@ releases:
       - postgres:
           auth:
             password: {{ .Values.postgresPassword }}
-      - dash0Monitoring:
-          enabled: true
 
   # Power Service - base service with no service dependencies
   - name: power
