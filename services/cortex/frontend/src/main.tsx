@@ -19,6 +19,7 @@ if (
     endpoint: {
       url: import.meta.env.VITE_DASH0_ENDPOINT_URL,
       authToken: import.meta.env.VITE_DASH0_AUTH_TOKEN,
+      ...(import.meta.env.VITE_DASH0_DATASET && { dataset: import.meta.env.VITE_DASH0_DATASET }),
     },
     // Enable trace context propagation to correlate frontend requests with backend traces
     propagators: [

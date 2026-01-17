@@ -67,6 +67,10 @@ spec:
               value: {{ .Values.dash0Frontend.endpoint | quote }}
             - name: VITE_DASH0_ENVIRONMENT
               value: {{ .Values.dash0Frontend.environment | quote }}
+            {{- if .Values.dash0Frontend.dataset }}
+            - name: VITE_DASH0_DATASET
+              value: {{ .Values.dash0Frontend.dataset | quote }}
+            {{- end }}
             {{- if .Values.dash0Frontend.authTokenSecret }}
             - name: VITE_DASH0_AUTH_TOKEN
               valueFrom:

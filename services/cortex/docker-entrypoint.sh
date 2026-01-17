@@ -18,6 +18,7 @@ if [ -d "$STATIC_DIR" ] && [ -n "$VITE_DASH0_ENABLED" ]; then
       -e "s|__VITE_DASH0_ENABLED__|${VITE_DASH0_ENABLED:-false}|g" \
       -e "s|__VITE_DASH0_ENDPOINT_URL__|${VITE_DASH0_ENDPOINT_URL:-}|g" \
       -e "s|__VITE_DASH0_AUTH_TOKEN__|${VITE_DASH0_AUTH_TOKEN:-}|g" \
+      -e "s|__VITE_DASH0_DATASET__|${VITE_DASH0_DATASET:-}|g" \
       -e "s|__VITE_DASH0_ENVIRONMENT__|${VITE_DASH0_ENVIRONMENT:-production}|g" \
       "$file"
   done

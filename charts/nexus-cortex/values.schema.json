@@ -187,6 +187,10 @@
           "description": "Deployment environment name (e.g., production, staging)",
           "default": "production"
         },
+        "dataset": {
+          "type": "string",
+          "description": "Optional Dash0 dataset name (can also be configured via auth token)"
+        },
         "authToken": {
           "type": "string",
           "description": "Dash0 auth token with Ingesting permissions (use authTokenSecret for production)"
